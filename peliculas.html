@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+
+    <style>
+      #peliculas {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+    </style>
+
+    <nav>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="peliculas.html">Peliculas</a></li>
+        <li><a href="series.html">Series</a></li>
+      </ul>
+    </nav>
+
+    <div id="menu">
+      <ul class="list">
+        <li class="buscar">Buscar Pelicula</li>
+        <li class="ultimas">Ultimas Peliculas</li>
+        <li class="valoradas">Mejor Valoradas</li>
+        <li class="populares">Mas Populares</li>
+        <li class="genero">Segun Genero</li>
+      </ul>
+    </div>
+
+    <form id="seccionBuscador">
+      <input type="text" id="buscador">
+    </form>
+    
+    <select id="seccionGeneros">
+      <option value="Acción">Acción</option>
+      <option value="Aventura">Aventura</option>
+      <option value="Animación">Animación</option>
+      <option value="Comedia">Comedia</option>
+      <option value="Crimen">Crimen</option>
+      <option value="Documental">Documental</option>
+      <option value="Drama">Drama</option>
+      <option value="Familia">Familia</option>
+      <option value="Fantasía">Fantasía</option>
+      <option value="Historia">Historia</option>
+      <option value="Terror">Terror</option>
+      <option value="Música">Música</option>
+      <option value="Misterio">Misterio</option>
+      <option value="Romance">Romance</option>
+      <option value="Ciencia ficción">Ciencia ficción</option>
+      <option value="Película de TV">Película de TV</option>
+      <option value="Suspense">Suspense</option>
+      <option value="Bélica">Bélica</option>
+      <option value="Western">Western</option>
+    </select>
+
+    <div id="peliculas"></div>
+
+    <script type="module" src="peliculas.js"></script>
+  </body>
+</html>

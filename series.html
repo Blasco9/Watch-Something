@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+
+    <style>
+      #series {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+    </style>
+
+    <nav>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="peliculas.html">Peliculas</a></li>
+        <li><a href="series.html">Series</a></li>
+      </ul>
+    </nav>
+
+    <div id="menu">
+      <ul class="list">
+        <li class="buscar">Buscar Serie</li>
+        <li class="ultimas">Ultimas Series</li>
+        <li class="valoradas">Mejor Valoradas</li>
+        <li class="populares">Mas Populares</li>
+        <li class="genero">Segun Genero</li>
+      </ul>
+    </div>
+
+    <form id="seccionBuscador">
+      <input type="text" id="buscador">
+    </form>
+    
+    <select id="seccionGeneros">
+      <option value="Action & Adventure">Action & Adventure</option>
+      <option value="Animación">Animación</option>
+      <option value="Comedia">Comedia</option>
+      <option value="Crimen">Crimen</option>
+      <option value="Documental">Documental</option>
+      <option value="Drama">Drama</option>
+      <option value="Familia">Familia</option>
+      <option value="Kids">Kids</option>
+      <option value="Misterio">Misterio</option>
+      <option value="News">News</option>
+      <option value="Reality">Reality</option>
+      <option value="Sci-Fi & Fantasy">Sci-Fi & Fantasy</option>
+      <option value="Soap">Soap</option>
+      <option value="Talk">Talk</option>
+      <option value="War & Politics">War & Politics</option>
+      <option value="Western">Western</option>
+    </select>
+    
+    <div id="series"></div>
+
+    <script type="module" src="series.js"></script>
+  </body>
+</html>
