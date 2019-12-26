@@ -1,18 +1,23 @@
-import { showLatestShows, showLatestMovies } from './main.js'
+import { showLatestShows } from './main.js';
 
+// Variables
 const API_KEY = '9d181ecc759bf1deab6d6c3688395ebb',
   seccionSeries = document.getElementById('series'),
   listaMenu = document.querySelector('.list'),
   seccionBuscador = document.getElementById('seccionBuscador'),
   seccionGeneros = document.getElementById('seccionGeneros');
+// Inicializa la lista de generos
+let genres = getGenres().then(resolve => {
+  genres = resolve.genres;
+});
 
-// Muestra ultimas series al cargar
+// Configuracion inicial al cargar
 onload = function init() {
+  // Muestra ultimas series al cargar
   showLatestShows();
-
   // Oculta el buscador
   seccionBuscador.style.display = 'none';
-  // Oculta lista de generos
+  // Oculta selector de genero
   seccionGeneros.style.display = 'none';
 };
 
@@ -23,7 +28,6 @@ function getTopRated() {
       return resolve.json();
     })
     .then(resolve => {
-      console.log(resolve);
       return resolve.results.filter((el, index) => index <= 9);
     });
   return shows;
@@ -32,7 +36,7 @@ function getTopRated() {
 function showTopRated() {
   getTopRated().then(resolve => {
     resolve.forEach(show => {
-      if(!show.poster_path){
+      if (!show.poster_path) {
         seccionSeries.innerHTML += `<div style="width: 20%" id="pelicula ${show.name}">
           <h3>${show.name}</h3>
           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Imagen_no_disponible.svg/1024px-Imagen_no_disponible.svg.png" style="width: 200px;">
@@ -54,55 +58,43 @@ function getPopular() {
       return resolve.json();
     })
     .then(resolve => {
-      console.log(resolve);
       return resolve.results.filter((el, index) => index <= 9);
     });
   return shows;
 }
 
-function showPopular() {
-  getPopular().then(resolve => {
-    resolve.forEach(show => {
-      if(!show.poster_path){
-        seccionSeries.innerHTML += `<div style="width: 20%" id="pelicula ${show.name}">
-          <h3>${show.name}</h3>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Imagen_no_disponible.svg/1024px-Imagen_no_disponible.svg.png" style="width: 200px;">
-          <p>${show.overview}</p></div>`;
-      } else {
-        seccionSeries.innerHTML += `<div style="width: 20%" id="pelicula ${show.name}">
-          <h3>${show.name}</h3>
-          <img src="http://image.tmdb.org/t/p/w200${show.poster_path}">
-          <p>${show.overview}</p></div>`;
-      }
-    });
-  });
-}
-
+// Genre
 function genreMode(e) {
-  if(e.target.className == 'genero'){
-    seccionGeneros.style.display = 'block'
-    seccionGeneros.addEventListener('change', showGenere);
+  if (e.target.className == 'genero') {
+    seccionGeneros.style.display = 'block';
+    seccionGeneros.addEventListener('change', function(e) {
+      showShows(getShowsByGenre);
+      e.preventDefault();
+    });
   } else {
-    seccionGeneros.style.display = 'none'
+    seccionGeneros.style.display = 'none';
   }
 }
 
-function getGenres(genre) {
-  let genreID = fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${API_KEY}&language=es`)
+function getGenres() {
+  let genres = fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${API_KEY}&language=es`)
     .then(resolve => {
       return resolve.json();
     })
     .then(resolve => {
-      let genreID;
-      resolve.genres.forEach(el => {
-        el.name === genre ? (genreID = el.id) : null;
-      });
-      return genreID;
+      return resolve;
     });
-  return genreID;
+  return genres;
 }
 
-function getShowsByGenre(genreID) {
+function getShowsByGenre() {
+  let selectedGenere = seccionGeneros.value;
+  let genreID;
+
+  genres.forEach(el => {
+    el.name === selectedGenere ? (genreID = el.id) : null;
+  });
+
   let shows = fetch(
     `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=es&sort_by=popularity.desc&with_genres=${genreID}&include_null_first_air_dates=false`
   )
@@ -110,46 +102,27 @@ function getShowsByGenre(genreID) {
       return resolve.json();
     })
     .then(resolve => {
-      return resolve;
+      return resolve.results;
     });
   return shows;
 }
 
-function showGenere(e) {
-  let genre = e.target.value;
-
-  seccionSeries.innerHTML = '';
-
-  getGenres(genre).then(genreID => {
-    getShowsByGenre(genreID).then(resolve => {
-      console.log(resolve.results);
-      resolve.results.forEach(show => {
-        if(!show.poster_path){
-          seccionSeries.innerHTML += `<div style="width: 20%" id="pelicula ${show.name}">
-            <h3>${show.name}</h3>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Imagen_no_disponible.svg/1024px-Imagen_no_disponible.svg.png" style="width: 200px;">
-            <p>${show.overview}</p></div>`;
-        } else {
-          seccionSeries.innerHTML += `<div style="width: 20%" id="pelicula ${show.name}">
-            <h3>${show.name}</h3>
-            <img src="http://image.tmdb.org/t/p/w200${show.poster_path}">
-            <p>${show.overview}</p></div>`;
-        }
-      });
-    });
-  });
-}
-
+// Search
 function searchMode(e) {
-  if(e.target.className == 'buscar'){
-    seccionBuscador.style.display = 'block'
-    seccionBuscador.addEventListener('submit', showShows);
+  if (e.target.className == 'buscar') {
+    seccionBuscador.style.display = 'block';
+    seccionBuscador.addEventListener('submit', function(e) {
+      showShows(searchShows);
+      e.preventDefault();
+    });
   } else {
-    seccionBuscador.style.display = 'none'
+    seccionBuscador.style.display = 'none';
   }
 }
 
-function searchShows(input) {
+function searchShows() {
+  let input = document.getElementById('buscador').value;
+
   let shows = fetch(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&language=es&query=${input}`)
     .then(resolve => {
       return resolve.json();
@@ -160,37 +133,28 @@ function searchShows(input) {
   return shows;
 }
 
-function showShows(e) {
-  let input = document.getElementById('buscador').value;
-  // Borra las peliculas de la busqueda anterior y el input
+// Muestra las series en pantalla
+function showShows(callback) {
   seccionSeries.innerHTML = '';
-  // Muestra las peliculas
-  searchShows(input).then(resolve => {
+
+  callback().then(resolve => {
     resolve.forEach(show => {
-      if(!show.poster_path){
-        seccionSeries.innerHTML += `<div style="width: 20%" id="pelicula ${show.name}">
+      seccionSeries.innerHTML += `<div style="width: 20%" id="pelicula ${show.name}">
           <h3>${show.name}</h3>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Imagen_no_disponible.svg/1024px-Imagen_no_disponible.svg.png" style="width: 200px;">
+          <img src="http://image.tmdb.org/t/p/w200${show.poster_path}" onerror="this.src='imagenes/Imagen_no_disponible.png'">
           <p>${show.overview}</p></div>`;
-      } else {
-        seccionSeries.innerHTML += `<div style="width: 20%" id="pelicula ${show.name}">
-          <h3>${show.name}</h3>
-          <img src="http://image.tmdb.org/t/p/w200${show.poster_path}">
-          <p>${show.overview}</p></div>`;
-      }
     });
   });
-  e.preventDefault();
 }
 
 // Events
-listaMenu.addEventListener('click',checkLi);
+listaMenu.addEventListener('click', checkLi);
 
 function checkLi(e) {
   seccionSeries.innerHTML = '';
-  e.target.className == 'buscar'? searchMode(e) : searchMode(e);
-  e.target.className == 'ultimas'? showLatestShows() : null;
-  e.target.className == 'valoradas'? showTopRated() : null;
-  e.target.className == 'populares'? showPopular() : null;
-  e.target.className == 'genero'? genreMode(e) : genreMode(e); 
+  e.target.className == 'buscar' ? searchMode(e) : searchMode(e);
+  e.target.className == 'ultimas' ? showLatestShows() : null;
+  e.target.className == 'valoradas' ? showShows(getTopRated) : null;
+  e.target.className == 'populares' ? showShows(getPopular) : null;
+  e.target.className == 'genero' ? genreMode(e) : genreMode(e);
 }
