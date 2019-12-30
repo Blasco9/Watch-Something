@@ -21,7 +21,7 @@ export function showLatestMovies() {
     resolve.forEach(movie => {
       seccionPeliculas.innerHTML += `<div style="width: 20%" id="pelicula ${movie.title}">
         <h3>${movie.title}</h3>
-        <img src="http://image.tmdb.org/t/p/w200${movie.poster_path}">
+        <img src="http://image.tmdb.org/t/p/w200${movie.poster_path}" onerror="this.src='imagenes/Imagen_no_disponible.png'">
         <p>${movie.overview}</p></div>`;
     });
   });
@@ -36,7 +36,6 @@ export function getLatestShows() {
       let shows = resolve.results.filter((el, index) => {
         return index <= 4;
       });
-      console.log(shows);
       return shows;
     });
 
@@ -50,7 +49,7 @@ export function showLatestShows() {
     resolve.forEach(show => {
       seccionSeries.innerHTML += `<div style="width: 20%" id="serie ${show.name}">
         <h3>${show.name}</h3>
-        <img src="http://image.tmdb.org/t/p/w200${show.poster_path}">
+        <img src="http://image.tmdb.org/t/p/w200${show.poster_path}" onerror="this.src='imagenes/Imagen_no_disponible.png'">
         <p>${show.overview}</p></div>`;
     });
   });
