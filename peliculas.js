@@ -1,15 +1,20 @@
 import { showLatestMovies } from './main.js';
 
+// Variables
 const API_KEY = '9d181ecc759bf1deab6d6c3688395ebb',
   seccionPeliculas = document.getElementById('peliculas'),
   listaMenu = document.querySelector('.list'),
   seccionBuscador = document.getElementById('seccionBuscador'),
   seccionGeneros = document.getElementById('seccionGeneros');
+// Inicializa la lista de generos
+let genres = getGenres().then(resolve => {
+  genres = resolve.genres;
+});
 
-// Muestra ultimas peliculas al cargar
+// Configuracion inicial al cargar
 onload = function init() {
+  // Muestra ultimas peliculas al cargar
   showLatestMovies();
-
   // Oculta el buscador
   seccionBuscador.style.display = 'none';
   // Oculta lista de generos
@@ -28,17 +33,6 @@ function getTopRated() {
   return movies;
 }
 
-function showTopRated() {
-  getTopRated().then(resolve => {
-    resolve.forEach(movie => {
-      seccionPeliculas.innerHTML += `<div style="width: 20%" id="pelicula ${movie.title}">
-        <h3>${movie.title}</h3>
-        <img src="http://image.tmdb.org/t/p/w200${movie.poster_path}">
-        <p>${movie.overview}</p></div>`;
-    });
-  });
-}
-
 // Popular
 function getPopular() {
   let movies = fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=es-&region=AR`)
@@ -51,42 +45,38 @@ function getPopular() {
   return movies;
 }
 
-function showPopular() {
-  getPopular().then(resolve => {
-    resolve.forEach(movie => {
-      seccionPeliculas.innerHTML += `<div style="width: 20%" id="pelicula ${movie.title}">
-        <h3>${movie.title}</h3>
-        <img src="http://image.tmdb.org/t/p/w200${movie.poster_path}">
-        <p>${movie.overview}</p></div>`;
-    });
-  });
-}
-
+// Genre
 function genreMode(e) {
-  if(e.target.className == 'genero'){
-    seccionGeneros.style.display = 'block'
-    seccionGeneros.addEventListener('change', showGenere);
+  if (e.target.className == 'genero') {
+    seccionGeneros.style.display = 'block';
+    seccionGeneros.addEventListener('change', function(e) {
+      showMovies(getMoviesByGenre);
+      e.preventDefault();
+    });
   } else {
-    seccionGeneros.style.display = 'none'
+    seccionGeneros.style.display = 'none';
   }
 }
 
-function getGenres(genre) {
-  let genreID = fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=es`)
+function getGenres() {
+  let genres = fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=es`)
     .then(resolve => {
       return resolve.json();
     })
     .then(resolve => {
-      let genreID;
-      resolve.genres.forEach(el => {
-        el.name === genre ? (genreID = el.id) : null;
-      });
-      return genreID;
+      return resolve;
     });
-  return genreID;
+  return genres;
 }
 
-function getMoviesByGenre(genreID) {
+function getMoviesByGenre() {
+  let selectedGenere = seccionGeneros.value;
+  let genreID;
+
+  genres.forEach(el => {
+    el.name === selectedGenere ? (genreID = el.id) : null;
+  });
+
   let movies = fetch(
     `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es&sort_by=popularity.desc&include_adult=true&with_genres=${genreID}`
   )
@@ -94,39 +84,27 @@ function getMoviesByGenre(genreID) {
       return resolve.json();
     })
     .then(resolve => {
-      return resolve;
+      return resolve.results;
     });
   return movies;
 }
 
-function showGenere(e) {
-  let genre = e.target.value;
-
-  seccionPeliculas.innerHTML = '';
-
-  getGenres(genre).then(genreID => {
-    getMoviesByGenre(genreID).then(resolve => {
-      console.log(resolve.results);
-      resolve.results.forEach(movie => {
-        seccionPeliculas.innerHTML += `<div style="width: 20%" id="pelicula ${movie.title}">
-        <h3>${movie.title}</h3>
-        <img src="http://image.tmdb.org/t/p/w200${movie.poster_path}" onerror="this.src='imagenes/Imagen_no_disponible.png'">
-        <p>${movie.overview}</p></div>`;
-      });
-    });
-  });
-}
-
+// Search
 function searchMode(e) {
-  if(e.target.className == 'buscar'){
-    seccionBuscador.style.display = 'block'
-    seccionBuscador.addEventListener('submit', showMovies);
+  if (e.target.className == 'buscar') {
+    seccionBuscador.style.display = 'block';
+    seccionBuscador.addEventListener('submit', function(e) {
+      showMovies(searchMovies);
+      e.preventDefault();
+    });
   } else {
-    seccionBuscador.style.display = 'none'
+    seccionBuscador.style.display = 'none';
   }
 }
 
-function searchMovies(input) {
+function searchMovies() {
+  let input = document.getElementById('buscador').value;
+
   let movies = fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=es&query=${input}&include_adult=true`)
     .then(resolve => {
       return resolve.json();
@@ -137,20 +115,18 @@ function searchMovies(input) {
   return movies;
 }
 
-function showMovies(e) {
-  let input = document.getElementById('buscador').value;
-  // Borra las peliculas de la busqueda anterior y el input
+// Muestra las peliculas en pantalla
+function showMovies(callback) {
   seccionPeliculas.innerHTML = '';
-  // Muestra las peliculas
-  searchMovies(input).then(resolve => {
+
+  callback().then(resolve => {
     resolve.forEach(movie => {
       seccionPeliculas.innerHTML += `<div style="width: 20%" id="pelicula ${movie.title}">
-      <h3>${movie.title}</h3>
-      <img src="http://image.tmdb.org/t/p/w200${movie.poster_path}">
-      <p>${movie.overview}</p></div>`;
+          <h3>${movie.title}</h3>
+          <img src="http://image.tmdb.org/t/p/w200${movie.poster_path}" onerror="this.src='imagenes/Imagen_no_disponible.png'">
+          <p>${movie.overview}</p></div>`;
     });
   });
-  e.preventDefault();
 }
 
 // Events
@@ -160,7 +136,7 @@ function checkLi(e) {
   seccionPeliculas.innerHTML = '';
   e.target.className == 'buscar' ? searchMode(e) : searchMode(e);
   e.target.className == 'ultimas' ? showLatestMovies() : null;
-  e.target.className == 'valoradas' ? showTopRated() : null;
-  e.target.className == 'populares' ? showPopular() : null;
+  e.target.className == 'valoradas' ? showMovies(getTopRated) : null;
+  e.target.className == 'populares' ? showMovies(getPopular) : null;
   e.target.className == 'genero' ? genreMode(e) : genreMode(e);
 }

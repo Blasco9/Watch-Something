@@ -33,24 +33,6 @@ function getTopRated() {
   return shows;
 }
 
-function showTopRated() {
-  getTopRated().then(resolve => {
-    resolve.forEach(show => {
-      if (!show.poster_path) {
-        seccionSeries.innerHTML += `<div style="width: 20%" id="pelicula ${show.name}">
-          <h3>${show.name}</h3>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Imagen_no_disponible.svg/1024px-Imagen_no_disponible.svg.png" style="width: 200px;">
-          <p>${show.overview}</p></div>`;
-      } else {
-        seccionSeries.innerHTML += `<div style="width: 20%" id="pelicula ${show.name}">
-          <h3>${show.name}</h3>
-          <img src="http://image.tmdb.org/t/p/w200${show.poster_path}">
-          <p>${show.overview}</p></div>`;
-      }
-    });
-  });
-}
-
 // Popular
 function getPopular() {
   let shows = fetch(`https://api.themoviedb.org/3/tv/popular?api_key=${API_KEY}&language=es`)
@@ -139,7 +121,7 @@ function showShows(callback) {
 
   callback().then(resolve => {
     resolve.forEach(show => {
-      seccionSeries.innerHTML += `<div style="width: 20%" id="pelicula ${show.name}">
+      seccionSeries.innerHTML += `<div style="width: 20%" id="serie ${show.name}">
           <h3>${show.name}</h3>
           <img src="http://image.tmdb.org/t/p/w200${show.poster_path}" onerror="this.src='imagenes/Imagen_no_disponible.png'">
           <p>${show.overview}</p></div>`;
