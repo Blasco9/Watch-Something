@@ -120,17 +120,24 @@ function showMovies(callback) {
   seccionPeliculas.innerHTML = '';
 
   callback().then(resolve => {
-    resolve.forEach(movie => {
-      seccionPeliculas.innerHTML += `<div style="width: 20%" id="pelicula ${movie.title}">
+    resolve.forEach((movie) => {
+      seccionPeliculas.innerHTML += `<div style="width: 20%" id="${movie.title}">
           <h3>${movie.title}</h3>
-          <img src="http://image.tmdb.org/t/p/w200${movie.poster_path}" onerror="this.src='imagenes/Imagen_no_disponible.png'">
-          <p>${movie.overview}</p></div>`;
+          <a href="pelicula.html"><img src="http://image.tmdb.org/t/p/w200${movie.poster_path}" id="${movie.id}" class="movie-img" onerror="this.src='imagenes/Imagen_no_disponible.png'"></a>
+          <p>${movie.overview}</p></div>`; 
     });
   });
 }
 
+function setMovieIdInStorage(e) {
+  if(e.target.className == "movie-img"){
+    sessionStorage.setItem('id', e.target.id)
+  }
+}
+
 // Events
 listaMenu.addEventListener('click', checkLi);
+seccionPeliculas.addEventListener('click', setMovieIdInStorage)
 
 function checkLi(e) {
   seccionPeliculas.innerHTML = '';
