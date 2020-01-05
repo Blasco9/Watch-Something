@@ -123,14 +123,18 @@ function showShows(callback) {
     resolve.forEach(show => {
       seccionSeries.innerHTML += `<div style="width: 20%" id="serie ${show.name}">
           <h3>${show.name}</h3>
-          <img src="http://image.tmdb.org/t/p/w200${show.poster_path}" onerror="this.src='imagenes/Imagen_no_disponible.png'">
+          <a href="serie.html"><img src="http://image.tmdb.org/t/p/w200${show.poster_path}" id="${show.id}" class="show-img" onerror="this.src='imagenes/Imagen_no_disponible.png'"></a>
           <p>${show.overview}</p></div>`;
     });
   });
 }
 
-// Events
-listaMenu.addEventListener('click', checkLi);
+// Guarda id de la serie en storage
+function setShowIdInStorage(e) {
+  if(e.target.className == "show-img"){
+    sessionStorage.setItem('id', e.target.id)
+  }
+}
 
 function checkLi(e) {
   seccionSeries.innerHTML = '';
@@ -140,3 +144,7 @@ function checkLi(e) {
   e.target.className == 'populares' ? showShows(getPopular) : null;
   e.target.className == 'genero' ? genreMode(e) : genreMode(e);
 }
+
+// Add events
+listaMenu.addEventListener('click', checkLi);
+seccionSeries.addEventListener('click', setShowIdInStorage)

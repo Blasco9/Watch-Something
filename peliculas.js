@@ -129,15 +129,12 @@ function showMovies(callback) {
   });
 }
 
+// Guarda id de la pelicula en storage
 function setMovieIdInStorage(e) {
   if(e.target.className == "movie-img"){
     sessionStorage.setItem('id', e.target.id)
   }
 }
-
-// Events
-listaMenu.addEventListener('click', checkLi);
-seccionPeliculas.addEventListener('click', setMovieIdInStorage)
 
 function checkLi(e) {
   seccionPeliculas.innerHTML = '';
@@ -147,3 +144,7 @@ function checkLi(e) {
   e.target.className == 'populares' ? showMovies(getPopular) : null;
   e.target.className == 'genero' ? genreMode(e) : genreMode(e);
 }
+
+// Add events
+listaMenu.addEventListener('click', checkLi);
+seccionPeliculas.addEventListener('click', setMovieIdInStorage)

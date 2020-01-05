@@ -1,4 +1,6 @@
-const API_KEY = '9d181ecc759bf1deab6d6c3688395ebb';
+const API_KEY = '9d181ecc759bf1deab6d6c3688395ebb',
+  seccionSeries = document.querySelector('#series'),
+  seccionPeliculas = document.querySelector('#peliculas');
 
 export function getLatestMovies() {
   let movies = fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&language=es&region=AR`)
@@ -15,13 +17,11 @@ export function getLatestMovies() {
 }
 
 export function showLatestMovies() {
-  const seccionPeliculas = document.querySelector('#peliculas');
-
   getLatestMovies().then(resolve => {
     resolve.forEach(movie => {
       seccionPeliculas.innerHTML += `<div style="width: 20%" id="pelicula ${movie.title}">
         <h3>${movie.title}</h3>
-        <img src="http://image.tmdb.org/t/p/w200${movie.poster_path}" onerror="this.src='imagenes/Imagen_no_disponible.png'">
+        <a href="pelicula.html"><img src="http://image.tmdb.org/t/p/w200${movie.poster_path}" id="${movie.id}" class="movie-img" onerror="this.src='imagenes/Imagen_no_disponible.png'"></a>
         <p>${movie.overview}</p></div>`;
     });
   });
@@ -43,19 +43,26 @@ export function getLatestShows() {
 }
 
 export function showLatestShows() {
-  let seccionSeries = document.querySelector('#series');
-
   getLatestShows().then(resolve => {
     resolve.forEach(show => {
       seccionSeries.innerHTML += `<div style="width: 20%" id="serie ${show.name}">
         <h3>${show.name}</h3>
-        <img src="http://image.tmdb.org/t/p/w200${show.poster_path}" onerror="this.src='imagenes/Imagen_no_disponible.png'">
+        <a href="serie.html"><img src="http://image.tmdb.org/t/p/w200${show.poster_path}" id="${show.id}" class="show-img" onerror="this.src='imagenes/Imagen_no_disponible.png'"></a>
         <p>${show.overview}</p></div>`;
     });
   });
 }
 
+function setIdInStorage(e) {
+  if (e.target.className.includes('img')) {
+    sessionStorage.setItem('id', e.target.id);
+  }
+}
+
 onload = function Initialize() {
   showLatestMovies();
   showLatestShows();
+
+  seccionSeries.addEventListener('click', setIdInStorage);
+  seccionPeliculas.addEventListener('click', setIdInStorage);
 };
