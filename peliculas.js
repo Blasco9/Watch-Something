@@ -96,7 +96,7 @@ function searchMode(e) {
     seccionBuscador.addEventListener('submit', function(e) {
       showMovies(searchMovies);
       e.preventDefault();
-    });
+    });  
   } else {
     seccionBuscador.style.display = 'none';
   }
@@ -121,10 +121,9 @@ function showMovies(callback) {
 
   callback().then(resolve => {
     resolve.forEach((movie) => {
-      seccionPeliculas.innerHTML += `<div style="width: 20%" id="${movie.title}">
-          <h3>${movie.title}</h3>
-          <a href="pelicula.html"><img src="http://image.tmdb.org/t/p/w200${movie.poster_path}" id="${movie.id}" class="movie-img" onerror="this.src='imagenes/Imagen_no_disponible.png'"></a>
-          <p>${movie.overview}</p></div>`; 
+      seccionPeliculas.innerHTML += `<div id="pelicula ${movie.title}">
+          <a href="pelicula.html"><img src="http://image.tmdb.org/t/p/w300${movie.poster_path}" id="${movie.id}" class="movie-img" onerror="this.src='imagenes/Imagen_no_disponible.png'; this.className='img-not-found';"></a>
+          </div>`; 
     });
   });
 }

@@ -121,10 +121,9 @@ function showShows(callback) {
 
   callback().then(resolve => {
     resolve.forEach(show => {
-      seccionSeries.innerHTML += `<div style="width: 20%" id="serie ${show.name}">
-          <h3>${show.name}</h3>
-          <a href="serie.html"><img src="http://image.tmdb.org/t/p/w200${show.poster_path}" id="${show.id}" class="show-img" onerror="this.src='imagenes/Imagen_no_disponible.png'"></a>
-          <p>${show.overview}</p></div>`;
+      seccionSeries.innerHTML += `<div id="serie ${show.name}">
+          <a href="serie.html"><img src="http://image.tmdb.org/t/p/w300${show.poster_path}" id="${show.id}" class="show-img" onerror="this.src='imagenes/Imagen_no_disponible.png'; this.className='img-not-found';"></a>
+          </div>`;
     });
   });
 }

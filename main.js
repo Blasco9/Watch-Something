@@ -20,7 +20,7 @@ export function showLatestMovies() {
   getLatestMovies().then(resolve => {
     resolve.forEach(movie => {
       seccionPeliculas.innerHTML += `<div id="pelicula ${movie.title}">
-        <a href="pelicula.html"><img src="http://image.tmdb.org/t/p/w200${movie.poster_path}" id="${movie.id}" class="movie-img" onerror="this.src='imagenes/Imagen_no_disponible.png'"></a>
+        <a href="pelicula.html"><img src="http://image.tmdb.org/t/p/w300${movie.poster_path}" id="${movie.id}" class="movie-img" onerror="this.src='imagenes/Imagen_no_disponible.png'"></a>
         </div>`;
     });
   });
@@ -45,7 +45,7 @@ export function showLatestShows() {
   getLatestShows().then(resolve => {
     resolve.forEach(show => {
       seccionSeries.innerHTML += `<div id="serie ${show.name}">
-        <a href="serie.html"><img src="http://image.tmdb.org/t/p/w200${show.poster_path}" id="${show.id}" class="show-img" onerror="this.src='imagenes/Imagen_no_disponible.png'"></a>
+        <a href="serie.html"><img src="http://image.tmdb.org/t/p/w300${show.poster_path}" id="${show.id}" class="show-img" onerror="this.src='imagenes/Imagen_no_disponible.png'"></a>
         </div>`;
     });
   });
