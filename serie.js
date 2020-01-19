@@ -1,12 +1,11 @@
 const API_KEY = '9d181ecc759bf1deab6d6c3688395ebb',
-  seccionSerie = document.getElementById('serie'),
-  listaMenu = document.querySelector('.list'),
+  showSection = document.getElementById('serie'),
   showId = sessionStorage.getItem('id');
 
 showShow();
 
 function getShow() {
-  let show = fetch(`https://api.themoviedb.org/3/tv/${showId}?api_key=${API_KEY}&language=es&append_to_response=credits,videos`)
+  let show = fetch(`https://api.themoviedb.org/3/tv/${showId}?api_key=${API_KEY}&language=en&append_to_response=credits,videos`)
     .then(res => {
       return res.json();
     })
@@ -29,7 +28,7 @@ function showShow() {
     let networks = show.networks.map(el => el.name).join(', ');
     let trailer = show.videos.results[0] || { key: '' };
 
-    seccionSerie.innerHTML = `<div id="serie ${show.name}">
+    showSection.innerHTML = `<div id="serie ${show.name}">
       <h3>${show.name}</h3>
       <div class="poster">
         <a href="#"><img src="http://image.tmdb.org/t/p/w300${show.poster_path}" id="${show.id}" class="show-img"   onerror="this.src='imagenes/Imagen_no_disponible.png'"></a>

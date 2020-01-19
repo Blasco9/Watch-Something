@@ -2,28 +2,28 @@ import { showLatestShows } from './main.js';
 
 // Variables
 const API_KEY = '9d181ecc759bf1deab6d6c3688395ebb',
-  seccionSeries = document.getElementById('series'),
-  listaMenu = document.querySelector('.list'),
-  seccionBuscador = document.getElementById('seccionBuscador'),
-  seccionGeneros = document.getElementById('seccionGeneros');
-// Inicializa la lista de generos
+  showsSection = document.getElementById('series'),
+  menuList = document.querySelector('.list'),
+  searchSection = document.getElementById('searchSection'),
+  genresSection = document.getElementById('genresSection');
+// Initialize genre list
 let genres = getGenres().then(resolve => {
   genres = resolve.genres;
 });
 
-// Configuracion inicial al cargar
+// Initial configuration on page load
 onload = function init() {
-  // Muestra ultimas series al cargar
+  // Shows latest shows on page load
   showLatestShows();
-  // Oculta el buscador
-  seccionBuscador.style.display = 'none';
-  // Oculta selector de genero
-  seccionGeneros.style.display = 'none';
+  // Hides the search bar
+  searchSection.style.display = 'none';
+  // Hides the genre list
+  genresSection.style.display = 'none';
 };
 
 // Top Rated
 function getTopRated() {
-  let shows = fetch(`https://api.themoviedb.org/3/tv/top_rated?api_key=${API_KEY}&language=es`)
+  let shows = fetch(`https://api.themoviedb.org/3/tv/top_rated?api_key=${API_KEY}&language=en`)
     .then(resolve => {
       return resolve.json();
     })
@@ -35,7 +35,7 @@ function getTopRated() {
 
 // Popular
 function getPopular() {
-  let shows = fetch(`https://api.themoviedb.org/3/tv/popular?api_key=${API_KEY}&language=es`)
+  let shows = fetch(`https://api.themoviedb.org/3/tv/popular?api_key=${API_KEY}&language=en`)
     .then(resolve => {
       return resolve.json();
     })
@@ -48,18 +48,18 @@ function getPopular() {
 // Genre
 function genreMode(e) {
   if (e.target.className == 'genero') {
-    seccionGeneros.style.display = 'block';
-    seccionGeneros.addEventListener('change', function(e) {
+    genresSection.style.display = 'block';
+    genresSection.addEventListener('change', function(e) {
       showShows(getShowsByGenre);
       e.preventDefault();
     });
   } else {
-    seccionGeneros.style.display = 'none';
+    genresSection.style.display = 'none';
   }
 }
 
 function getGenres() {
-  let genres = fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${API_KEY}&language=es`)
+  let genres = fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${API_KEY}&language=en`)
     .then(resolve => {
       return resolve.json();
     })
@@ -70,7 +70,7 @@ function getGenres() {
 }
 
 function getShowsByGenre() {
-  let selectedGenere = seccionGeneros.value;
+  let selectedGenere = genresSection.value;
   let genreID;
 
   genres.forEach(el => {
@@ -78,7 +78,7 @@ function getShowsByGenre() {
   });
 
   let shows = fetch(
-    `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=es&sort_by=popularity.desc&with_genres=${genreID}&include_null_first_air_dates=false`
+    `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=en&sort_by=popularity.desc&with_genres=${genreID}&include_null_first_air_dates=false`
   )
     .then(resolve => {
       return resolve.json();
@@ -92,20 +92,20 @@ function getShowsByGenre() {
 // Search
 function searchMode(e) {
   if (e.target.className == 'buscar') {
-    seccionBuscador.style.display = 'block';
-    seccionBuscador.addEventListener('submit', function(e) {
+    searchSection.style.display = 'block';
+    searchSection.addEventListener('submit', function(e) {
       showShows(searchShows);
       e.preventDefault();
     });
   } else {
-    seccionBuscador.style.display = 'none';
+    searchSection.style.display = 'none';
   }
 }
 
 function searchShows() {
   let input = document.getElementById('buscador').value;
 
-  let shows = fetch(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&language=es&query=${input}`)
+  let shows = fetch(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&language=en&query=${input}`)
     .then(resolve => {
       return resolve.json();
     })
@@ -115,20 +115,20 @@ function searchShows() {
   return shows;
 }
 
-// Muestra las series en pantalla
+// Renders shows
 function showShows(callback) {
-  seccionSeries.innerHTML = '';
+  showsSection.innerHTML = '';
 
   callback().then(resolve => {
     resolve.forEach(show => {
-      seccionSeries.innerHTML += `<div id="serie ${show.name}">
+      showsSection.innerHTML += `<div id="serie ${show.name}">
           <a href="serie.html"><img src="http://image.tmdb.org/t/p/w300${show.poster_path}" id="${show.id}" class="show-img" onerror="this.src='imagenes/Imagen_no_disponible.png'; this.className='img-not-found';"></a>
           </div>`;
     });
   });
 }
 
-// Guarda id de la serie en storage
+// Stores show id in session storage
 function setShowIdInStorage(e) {
   if(e.target.className == "show-img"){
     sessionStorage.setItem('id', e.target.id)
@@ -136,7 +136,7 @@ function setShowIdInStorage(e) {
 }
 
 function checkLi(e) {
-  seccionSeries.innerHTML = '';
+  showsSection.innerHTML = '';
   e.target.className == 'buscar' ? searchMode(e) : searchMode(e);
   e.target.className == 'ultimas' ? showLatestShows() : null;
   e.target.className == 'valoradas' ? showShows(getTopRated) : null;
@@ -145,5 +145,5 @@ function checkLi(e) {
 }
 
 // Add events
-listaMenu.addEventListener('click', checkLi);
-seccionSeries.addEventListener('click', setShowIdInStorage)
+menuList.addEventListener('click', checkLi);
+showsSection.addEventListener('click', setShowIdInStorage)
