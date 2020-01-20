@@ -1,8 +1,8 @@
-import { showLatestShows } from './main.js';
+import { showLatestMovies } from './main.js';
 
 // Variables
 const API_KEY = '9d181ecc759bf1deab6d6c3688395ebb',
-  showsSection = document.getElementById('series'),
+  moviesSection = document.getElementById('movies'),
   menuList = document.querySelector('.list'),
   searchSection = document.getElementById('searchSection'),
   genresSection = document.getElementById('genresSection');
@@ -13,8 +13,8 @@ let genres = getGenres().then(resolve => {
 
 // Initial configuration on page load
 onload = function init() {
-  // Shows latest shows on page load
-  showLatestShows();
+  // Shows latest movies on page load
+  showLatestMovies();
   // Hides the search bar
   searchSection.style.display = 'none';
   // Hides the genre list
@@ -23,34 +23,36 @@ onload = function init() {
 
 // Top Rated
 function getTopRated() {
-  let shows = fetch(`https://api.themoviedb.org/3/tv/top_rated?api_key=${API_KEY}&language=en`)
+  let movies = fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en`)
     .then(resolve => {
       return resolve.json();
     })
     .then(resolve => {
       return resolve.results.filter((el, index) => index <= 9);
     });
-  return shows;
+  return movies;
 }
 
 // Popular
 function getPopular() {
-  let shows = fetch(`https://api.themoviedb.org/3/tv/popular?api_key=${API_KEY}&language=en`)
+  let movies = fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en`)
     .then(resolve => {
       return resolve.json();
     })
     .then(resolve => {
       return resolve.results.filter((el, index) => index <= 9);
     });
-  return shows;
+  return movies;
 }
 
 // Genre
 function genreMode(e) {
-  if (e.target.className == 'genero') {
+  moviesSection.innerHTML = '';
+
+  if (e.target.className == 'genre') {
     genresSection.style.display = 'block';
     genresSection.addEventListener('change', function(e) {
-      showShows(getShowsByGenre);
+      showMovies(getMoviesByGenre);
       e.preventDefault();
     });
   } else {
@@ -59,7 +61,7 @@ function genreMode(e) {
 }
 
 function getGenres() {
-  let genres = fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${API_KEY}&language=en`)
+  let genres = fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en`)
     .then(resolve => {
       return resolve.json();
     })
@@ -69,7 +71,7 @@ function getGenres() {
   return genres;
 }
 
-function getShowsByGenre() {
+function getMoviesByGenre() {
   let selectedGenere = genresSection.value;
   let genreID;
 
@@ -77,8 +79,8 @@ function getShowsByGenre() {
     el.name === selectedGenere ? (genreID = el.id) : null;
   });
 
-  let shows = fetch(
-    `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=en&sort_by=popularity.desc&with_genres=${genreID}&include_null_first_air_dates=false`
+  let movies = fetch(
+    `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en&sort_by=popularity.desc&include_adult=true&with_genres=${genreID}`
   )
     .then(resolve => {
       return resolve.json();
@@ -86,64 +88,65 @@ function getShowsByGenre() {
     .then(resolve => {
       return resolve.results;
     });
-  return shows;
+  return movies;
 }
 
 // Search
 function searchMode(e) {
-  if (e.target.className == 'buscar') {
+  moviesSection.innerHTML = '';
+
+  if (e.target.className == 'search') {
     searchSection.style.display = 'block';
     searchSection.addEventListener('submit', function(e) {
-      showShows(searchShows);
+      showMovies(searchMovies);
       e.preventDefault();
-    });
+    });  
   } else {
     searchSection.style.display = 'none';
   }
 }
 
-function searchShows() {
-  let input = document.getElementById('buscador').value;
+function searchMovies() {
+  let input = document.getElementById('search').value;
 
-  let shows = fetch(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&language=en&query=${input}`)
+  let movies = fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en&query=${input}&include_adult=true`)
     .then(resolve => {
       return resolve.json();
     })
     .then(resolve => {
       return resolve.results;
     });
-  return shows;
+  return movies;
 }
 
-// Renders shows
-function showShows(callback) {
-  showsSection.innerHTML = '';
+// Renders movies
+function showMovies(callback) {
+  moviesSection.innerHTML = '';
 
   callback().then(resolve => {
-    resolve.forEach(show => {
-      showsSection.innerHTML += `<div id="serie ${show.name}">
-          <a href="serie.html"><img src="http://image.tmdb.org/t/p/w300${show.poster_path}" id="${show.id}" class="show-img" onerror="this.src='imagenes/Imagen_no_disponible.png'; this.className='img-not-found';"></a>
-          </div>`;
+    resolve.forEach((movie) => {
+      moviesSection.innerHTML += `<div id="movie ${movie.title}">
+          <a href="movie.html"><img src="http://image.tmdb.org/t/p/w300${movie.poster_path}" id="${movie.id}" class="movie-img" onerror="this.src='imagenes/Imagen_no_disponible.png'; this.className='img-not-found';"></a>
+          </div>`; 
     });
   });
 }
 
-// Stores show id in session storage
-function setShowIdInStorage(e) {
-  if(e.target.className == "show-img"){
+// Stores movie id in session storage
+function setMovieIdInStorage(e) {
+  if(e.target.className == "movie-img"){
     sessionStorage.setItem('id', e.target.id)
   }
 }
 
 function checkLi(e) {
-  showsSection.innerHTML = '';
-  e.target.className == 'buscar' ? searchMode(e) : searchMode(e);
-  e.target.className == 'ultimas' ? showLatestShows() : null;
-  e.target.className == 'valoradas' ? showShows(getTopRated) : null;
-  e.target.className == 'populares' ? showShows(getPopular) : null;
-  e.target.className == 'genero' ? genreMode(e) : genreMode(e);
+  e.target.className == 'search' ? searchMode(e) : searchMode(e);
+  e.target.className == 'latest' ? showLatestMovies() : null;
+  e.target.className == 'top-rated' ? showMovies(getTopRated) : null;
+  e.target.className == 'popular' ? showMovies(getPopular) : null;
+  e.target.className == 'genre' ? genreMode(e) : genreMode(e);
 }
 
 // Add events
 menuList.addEventListener('click', checkLi);
-showsSection.addEventListener('click', setShowIdInStorage)
+moviesSection.addEventListener('click', setMovieIdInStorage)

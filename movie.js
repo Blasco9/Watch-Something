@@ -1,5 +1,5 @@
 const API_KEY = '9d181ecc759bf1deab6d6c3688395ebb',
-  movieSection = document.getElementById('pelicula'),
+  movieSection = document.getElementById('movie'),
   movieId = sessionStorage.getItem('id');
 
 showMovie();
@@ -26,7 +26,7 @@ function showMovie() {
     let genres = movie.genres.map(el => el.name).join(', ');
     let trailer = movie.videos.results[0] || { key: '' };
 
-    movieSection.innerHTML = `<div id="pelicula ${movie.title}">
+    movieSection.innerHTML = `<div id="movie ${movie.title}">
       <h3>${movie.title}</h3>
       <div class="poster">
         <a href="#"><img src="http://image.tmdb.org/t/p/w300${movie.poster_path}" id="${movie.id}" class="movie-img" onerror="this.src='imagenes/Imagen_no_disponible.png'"></a>
@@ -45,7 +45,7 @@ function showMovie() {
       </div>
     </div>
     <div id='video'>
-      <iframe width="600" height="400" src="https://www.youtube.com/embed/${trailer.key}" frameborder="0" allowfullscreen></iframe>
+      <iframe width="600" height="400" src="https://www.youtube.com/embed/${trailer.key}" allowfullscreen></iframe>
     </div>`;
   });
 }
