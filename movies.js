@@ -6,6 +6,7 @@ const API_KEY = '9d181ecc759bf1deab6d6c3688395ebb',
   menuList = document.querySelector('.list'),
   searchSection = document.getElementById('searchSection'),
   genresSection = document.getElementById('genresSection');
+let page = 1;
 // Initialize genre list
 let genres = getGenres().then(resolve => {
   genres = resolve.genres;
