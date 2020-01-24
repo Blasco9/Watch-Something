@@ -5,8 +5,12 @@ const API_KEY = '9d181ecc759bf1deab6d6c3688395ebb',
   moviesSection = document.getElementById('movies'),
   menuList = document.querySelector('.list'),
   searchSection = document.getElementById('searchSection'),
-  genresSection = document.getElementById('genresSection');
-let page = 1;
+  genresSection = document.getElementById('genresSection'),
+  pagesSection = document.getElementById('pages');
+let currentPage = 1,
+  totalPages = 0,
+  selectedLi = menuList.children[1],
+  selectedBtn = pagesSection.children[1];
 // Initialize genre list
 let genres = getGenres().then(resolve => {
   genres = resolve.genres;
@@ -28,23 +32,26 @@ onload = function init() {
 function addEvents() {
   menuList.addEventListener('click', checkLi);
   moviesSection.addEventListener('click', setMovieIdInStorage);
+  genresSection.addEventListener('change', function(e) {
+    currentPage = 1;
+    showMovies(getMoviesByGenre);
+    e.preventDefault();
+  });
   searchSection.addEventListener('submit', function(e) {
     showMovies(searchMovies);
     e.preventDefault();
   });
-  genresSection.addEventListener('change', function(e) {
-    showMovies(getMoviesByGenre);
-    e.preventDefault();
-  });
+  pagesSection.addEventListener('click', checkPage);
 }
 
 // Top Rated
 function getTopRated() {
-  let movies = fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en`)
+  let movies = fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en&page=${currentPage}`)
     .then(resolve => {
       return resolve.json();
     })
     .then(resolve => {
+      totalPages = resolve.total_pages;
       return resolve.results.filter((el, index) => index <= 11);
     });
   return movies;
@@ -52,21 +59,22 @@ function getTopRated() {
 
 // Popular
 function getPopular() {
-  let movies = fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en`)
+  let movies = fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en&page=${currentPage}`)
     .then(resolve => {
       return resolve.json();
     })
     .then(resolve => {
+      totalPages = resolve.total_pages;
       return resolve.results.filter((el, index) => index <= 11);
     });
   return movies;
 }
 
 // Genre
-function genreMode(e) {
+function genreMode(li) {
   moviesSection.innerHTML = '';
 
-  if (e.target.className.includes('genre')) {
+  if (li.className.includes('genre')) {
     genresSection.style.display = 'block';
   } else {
     genresSection.style.display = 'none';
@@ -93,23 +101,24 @@ function getMoviesByGenre() {
   });
 
   let movies = fetch(
-    `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en&sort_by=popularity.desc&include_adult=true&with_genres=${genreID}`
+    `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en&sort_by=popularity.desc&include_adult=true&with_genres=${genreID}&page=${currentPage}`
   )
     .then(resolve => {
       return resolve.json();
     })
     .then(resolve => {
+      totalPages = resolve.total_pages;
       return resolve.results;
     });
   return movies;
 }
 
 // Search
-function searchMode(e) {
+function searchMode(li) {
   moviesSection.innerHTML = '';
   document.getElementById('search').value = '';
 
-  if (e.target.className.includes('search')) {
+  if (li.className.includes('search')) {
     searchSection.style.display = 'block';
   } else {
     searchSection.style.display = 'none';
@@ -119,12 +128,14 @@ function searchMode(e) {
 function searchMovies() {
   let input = document.getElementById('search').value;
 
-  let movies = fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en&query=${input}&include_adult=true`)
+  let movies = fetch(
+    `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en&query=${input}&include_adult=true&page=${currentPage}`
+  )
     .then(resolve => {
       return resolve.json();
     })
     .then(resolve => {
-      console.log(resolve.results);
+      totalPages = resolve.total_pages;
       return resolve.results;
     });
   return movies;
@@ -151,20 +162,80 @@ function setMovieIdInStorage(e) {
 }
 
 function checkLi(e) {
-  toggleSelected(e);
+  let li = e.target ? e.target : e;
 
-  e.target.className.includes('search') ? searchMode(e) : searchMode(e);
-  e.target.className.includes('latest') ? showLatestMovies() : null;
-  e.target.className.includes('top-rated') ? showMovies(getTopRated) : null;
-  e.target.className.includes('popular') ? showMovies(getPopular) : null;
-  e.target.className.includes('genre') ? genreMode(e) : genreMode(e);
+  toggleSelectedLi(li);
+
+  li.className.includes('search') ? searchMode(li) : searchMode(li);
+  li.className.includes('latest') ? showLatestMovies() : null;
+  li.className.includes('top-rated') ? showMovies(getTopRated) : null;
+  li.className.includes('popular') ? showMovies(getPopular) : null;
+  li.className.includes('genre') ? genreMode(li) : genreMode(li);
 }
 
 // Change color of selected Li
-function toggleSelected(e) {
-  let lis = menuList.children;
+function toggleSelectedLi(li) {
+  // Get lis and convert to arr
+  let lis = [...menuList.children];
 
-  for (let i = 0; i < lis.length; i++) {
-    lis[i] == e.target ? lis[i].classList.add('selected') : lis[i].classList.remove('selected');
+  lis.forEach(el => {
+    if (el == li) {
+      el.classList.add('selected');
+      selectedLi = el;
+    } else {
+      el.classList.remove('selected');
+    }
+  });
+}
+
+function checkPage(e) {
+  let btn = e.target.textContent;
+
+  if (currentPage == 1) {
+    btn != '<-' ? changePage(btn) : null;
+  } else if (currentPage == totalPages) {
+    btn != '->' ? changePage(btn) : null;
+  } else if (currentPage > 1 && currentPage < totalPages) {
+    changePage(btn);
   }
+}
+
+// Change the movie page displayed
+function changePage(btn) {
+  let btns = [...pagesSection.children],
+    firstNum = Number(btns[1].textContent),
+    lastNum = Number(btns[10].textContent);
+
+  if (Number(btn)) {
+    currentPage = btn;
+    toggleSelectedBtn(currentPage, firstNum);
+  } else if (btn == '<-') {
+    currentPage--;
+    currentPage < firstNum ? toggleSelectedBtn(currentPage, firstNum - 1) : toggleSelectedBtn(currentPage, firstNum);
+  } else {
+    currentPage++;
+    currentPage > lastNum ? toggleSelectedBtn(currentPage, firstNum + 1) : toggleSelectedBtn(currentPage, firstNum);
+  }
+
+  // Make request for next page of selected li
+  selectedLi.className.includes('genre')
+    ? showMovies(getMoviesByGenre)
+    : selectedLi.className.includes('search')
+    ? showMovies(searchMovies)
+    : checkLi(selectedLi);
+}
+
+function toggleSelectedBtn(currentBtn, btnNum) {
+  let btns = [...pagesSection.children].slice(1, 11);
+  
+  btns.forEach(el => {
+    el.textContent = btnNum;
+    if (el.textContent == currentBtn) {
+      el.classList.add('selected');
+      selectedBtn = el;
+    } else {
+      el.classList.remove('selected');
+    }
+    btnNum++;
+  });
 }
