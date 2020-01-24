@@ -1,0 +1,214 @@
+/* CSS RESET */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+  line-height: 1;
+  font-family: 'Roboto', sans-serif;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* UTILITY CLASSES */ 
+.selected {
+  color: rgb(255, 133, 11);
+}
+
+/* NAVBAR */
+nav {
+  width: 100%;
+  position: fixed;
+  background-color: rgb(83, 83, 83);
+  border-bottom: 2px solid rgb(141, 141, 141);
+}
+
+#navbar {
+  display: flex;
+  max-width: 50%;
+  margin: auto;
+  padding: 1rem 0;
+  justify-content: space-around;
+  font-weight: 900;
+}
+
+#navbar li, #navbar a {
+  text-decoration: none;
+  list-style-type: none;
+  color: rgb(204, 204, 204);
+}
+
+#navbar a:hover {
+  color: rgb(255, 255, 255)
+}
+
+/* MOVIES AND SHOWS */
+.header {
+  padding-top: 5rem;
+  text-align: center;
+}
+
+.header-text {
+  font-size: 2rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+#movies, #shows {
+  padding: 2rem 2rem 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+#movies div, #shows div{
+  margin: 1rem 0.5rem;
+}
+
+.movie-img, .show-img {
+  width: 100%;
+  height: 100%;
+}
+
+.img-not-found {
+  width: 100%;
+  height: 100%;
+}
+
+/* MOVIES AND SHOWS MENU */
+#menu {
+  padding-top: 6rem;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  list-style: none;
+}
+
+.list li {
+  cursor: pointer;
+}
+
+.list li:hover {
+  color: peru;
+}
+
+/* BUSCADOR */
+#search {
+  display: block;
+  margin: 2rem auto;
+  padding-left: 0.5rem;
+  width: 60%;
+  height: 2rem;
+  font-size: 1.2rem;
+}
+
+/* GENEROS */
+#genresSection {
+  margin: 2rem auto;
+  width: 20%;
+  height: 2rem;
+  text-align-last: center;
+}
+
+/* PELICULA Y SERIE*/
+#movie, #show {
+  padding: 5rem 2rem 0 2rem;
+}
+
+.poster {
+  display: inline-block;
+}
+
+.info {
+  display: inline-block;
+  padding-left: 2rem;
+  vertical-align: top;
+  font-size: 1.2rem;
+}
+
+.info-item {
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+}
+
+.overview {
+  margin: 3rem auto;
+  width: 90%;
+  text-align: center;
+}
+
+.overview p {
+  line-height: 1.7;
+}
+
+#video {
+  margin: 5rem auto;
+  text-align: center;
+}
+
+#video iframe {
+  border: none;
+  width: 50%;
+}
+
+/* MEDIA QUERIES */
+@media screen and (min-width: 1560px) {
+  #movies, #shows {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .list {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .list li {
+    padding: 10px 0;
+  }
+}
+
+@media screen and (max-width: 370px) {
+  #movies, #shows {
+    grid-template-columns: 1fr;
+  }
+}

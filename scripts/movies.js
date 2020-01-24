@@ -20,7 +20,23 @@ onload = function init() {
   searchSection.style.display = 'none';
   // Hides the genre list
   genresSection.style.display = 'none';
+  // Initialize all event listeners
+  addEvents();
 };
+
+// Adds events
+function addEvents() {
+  menuList.addEventListener('click', checkLi);
+  moviesSection.addEventListener('click', setMovieIdInStorage);
+  searchSection.addEventListener('submit', function(e) {
+    showMovies(searchMovies);
+    e.preventDefault();
+  });
+  genresSection.addEventListener('change', function(e) {
+    showMovies(getMoviesByGenre);
+    e.preventDefault();
+  });
+}
 
 // Top Rated
 function getTopRated() {
@@ -29,7 +45,7 @@ function getTopRated() {
       return resolve.json();
     })
     .then(resolve => {
-      return resolve.results.filter((el, index) => index <= 9);
+      return resolve.results.filter((el, index) => index <= 11);
     });
   return movies;
 }
@@ -41,7 +57,7 @@ function getPopular() {
       return resolve.json();
     })
     .then(resolve => {
-      return resolve.results.filter((el, index) => index <= 9);
+      return resolve.results.filter((el, index) => index <= 11);
     });
   return movies;
 }
@@ -50,12 +66,8 @@ function getPopular() {
 function genreMode(e) {
   moviesSection.innerHTML = '';
 
-  if (e.target.className == 'genre') {
+  if (e.target.className.includes('genre')) {
     genresSection.style.display = 'block';
-    genresSection.addEventListener('change', function(e) {
-      showMovies(getMoviesByGenre);
-      e.preventDefault();
-    });
   } else {
     genresSection.style.display = 'none';
   }
@@ -95,13 +107,10 @@ function getMoviesByGenre() {
 // Search
 function searchMode(e) {
   moviesSection.innerHTML = '';
+  document.getElementById('search').value = '';
 
-  if (e.target.className == 'search') {
+  if (e.target.className.includes('search')) {
     searchSection.style.display = 'block';
-    searchSection.addEventListener('submit', function(e) {
-      showMovies(searchMovies);
-      e.preventDefault();
-    });  
   } else {
     searchSection.style.display = 'none';
   }
@@ -115,6 +124,7 @@ function searchMovies() {
       return resolve.json();
     })
     .then(resolve => {
+      console.log(resolve.results);
       return resolve.results;
     });
   return movies;
@@ -125,29 +135,36 @@ function showMovies(callback) {
   moviesSection.innerHTML = '';
 
   callback().then(resolve => {
-    resolve.forEach((movie) => {
+    resolve.forEach(movie => {
       moviesSection.innerHTML += `<div id="movie ${movie.title}">
-          <a href="movie.html"><img src="http://image.tmdb.org/t/p/w300${movie.poster_path}" id="${movie.id}" class="movie-img" onerror="this.src='imagenes/Imagen_no_disponible.png'; this.className='img-not-found';"></a>
-          </div>`; 
+          <a href="movie.html"><img src="http://image.tmdb.org/t/p/w300${movie.poster_path}" id="${movie.id}" class="movie-img" onerror="this.src='img/img-not-found.png'; this.className='img-not-found';"></a>
+          </div>`;
     });
   });
 }
 
 // Stores movie id in session storage
 function setMovieIdInStorage(e) {
-  if(e.target.className == "movie-img"){
-    sessionStorage.setItem('id', e.target.id)
+  if (e.target.className == 'movie-img') {
+    sessionStorage.setItem('id', e.target.id);
   }
 }
 
 function checkLi(e) {
-  e.target.className == 'search' ? searchMode(e) : searchMode(e);
-  e.target.className == 'latest' ? showLatestMovies() : null;
-  e.target.className == 'top-rated' ? showMovies(getTopRated) : null;
-  e.target.className == 'popular' ? showMovies(getPopular) : null;
-  e.target.className == 'genre' ? genreMode(e) : genreMode(e);
+  toggleSelected(e);
+
+  e.target.className.includes('search') ? searchMode(e) : searchMode(e);
+  e.target.className.includes('latest') ? showLatestMovies() : null;
+  e.target.className.includes('top-rated') ? showMovies(getTopRated) : null;
+  e.target.className.includes('popular') ? showMovies(getPopular) : null;
+  e.target.className.includes('genre') ? genreMode(e) : genreMode(e);
 }
 
-// Add events
-menuList.addEventListener('click', checkLi);
-moviesSection.addEventListener('click', setMovieIdInStorage)
+// Change color of selected Li
+function toggleSelected(e) {
+  let lis = menuList.children;
+
+  for (let i = 0; i < lis.length; i++) {
+    lis[i] == e.target ? lis[i].classList.add('selected') : lis[i].classList.remove('selected');
+  }
+}

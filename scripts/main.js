@@ -9,7 +9,7 @@ export function getLatestMovies() {
     })
     .then(resolve => {
       let movies = resolve.results.filter((el, index) => {
-        return index <= 4;
+        return index <= 11;
       });
       return movies;
     });
@@ -20,7 +20,7 @@ export function showLatestMovies() {
   getLatestMovies().then(resolve => {
     resolve.forEach(movie => {
       moviesSection.innerHTML += `<div id="movie ${movie.title}">
-        <a href="movie.html"><img src="http://image.tmdb.org/t/p/w300${movie.poster_path}" id="${movie.id}" class="movie-img" onerror="this.src='imagenes/Imagen_no_disponible.png'"></a>
+        <a href="movie.html"><img src="http://image.tmdb.org/t/p/w300${movie.poster_path}" id="${movie.id}" class="movie-img" onerror="this.src='img/img-not-found.png'"></a>
         </div>`;
     });
   });
@@ -33,7 +33,7 @@ export function getLatestShows() {
     })
     .then(resolve => {
       let shows = resolve.results.filter((el, index) => {
-        return index <= 4;
+        return index <= 11;
       });
       return shows;
     });
@@ -45,7 +45,7 @@ export function showLatestShows() {
   getLatestShows().then(resolve => {
     resolve.forEach(show => {
       showsSection.innerHTML += `<div id="show ${show.name}">
-        <a href="show.html"><img src="http://image.tmdb.org/t/p/w300${show.poster_path}" id="${show.id}" class="show-img" onerror="this.src='imagenes/Imagen_no_disponible.png'"></a>
+        <a href="show.html"><img src="http://image.tmdb.org/t/p/w300${show.poster_path}" id="${show.id}" class="show-img" onerror="this.src='img/img-not-found.png'"></a>
         </div>`;
     });
   });

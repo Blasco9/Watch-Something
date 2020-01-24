@@ -31,7 +31,7 @@ function showShow() {
     showSection.innerHTML = `<div id="show ${show.name}">
       <h3>${show.name}</h3>
       <div class="poster">
-        <a href="#"><img src="http://image.tmdb.org/t/p/w300${show.poster_path}" id="${show.id}" class="show-img"   onerror="this.src='imagenes/Imagen_no_disponible.png'"></a>
+        <a href="#"><img src="http://image.tmdb.org/t/p/w300${show.poster_path}" id="${show.id}" class="show-img"   onerror="this.src='img/img-not-found.png'"></a>
       </div>
       <div class="info">
         <p><span class="info-item">Cast:</span> ${cast}</p>

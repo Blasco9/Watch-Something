@@ -29,7 +29,7 @@ function showMovie() {
     movieSection.innerHTML = `<div id="movie ${movie.title}">
       <h3>${movie.title}</h3>
       <div class="poster">
-        <a href="#"><img src="http://image.tmdb.org/t/p/w300${movie.poster_path}" id="${movie.id}" class="movie-img" onerror="this.src='imagenes/Imagen_no_disponible.png'"></a>
+        <a href="#"><img src="http://image.tmdb.org/t/p/w300${movie.poster_path}" id="${movie.id}" class="movie-img" onerror="this.src='img/img-not-found.png'"></a>
       </div>
       <div class="info">
         <p><span class="info-item">Cast:</span> ${cast}</p>

@@ -19,7 +19,23 @@ onload = function init() {
   searchSection.style.display = 'none';
   // Hides the genre list
   genresSection.style.display = 'none';
+  // Initialize all event listeners
+  addEvents();
 };
+
+// Adds events
+function addEvents() {
+  menuList.addEventListener('click', checkLi);
+  showsSection.addEventListener('click', setShowIdInStorage);
+  genresSection.addEventListener('change', function(e) {
+    showShows(getShowsByGenre);
+    e.preventDefault();
+  });
+  searchSection.addEventListener('submit', function(e) {
+    showShows(searchShows);
+    e.preventDefault();
+  });
+}
 
 // Top Rated
 function getTopRated() {
@@ -28,7 +44,7 @@ function getTopRated() {
       return resolve.json();
     })
     .then(resolve => {
-      return resolve.results.filter((el, index) => index <= 9);
+      return resolve.results.filter((el, index) => index <= 11);
     });
   return shows;
 }
@@ -40,7 +56,7 @@ function getPopular() {
       return resolve.json();
     })
     .then(resolve => {
-      return resolve.results.filter((el, index) => index <= 9);
+      return resolve.results.filter((el, index) => index <= 11);
     });
   return shows;
 }
@@ -48,13 +64,10 @@ function getPopular() {
 // Genre
 function genreMode(e) {
   showsSection.innerHTML = '';
+  document.getElementById('search').value = '';
 
-  if (e.target.className == 'genre') {
+  if (e.target.className.includes('genre')) {
     genresSection.style.display = 'block';
-    genresSection.addEventListener('change', function(e) {
-      showShows(getShowsByGenre);
-      e.preventDefault();
-    });
   } else {
     genresSection.style.display = 'none';
   }
@@ -95,12 +108,8 @@ function getShowsByGenre() {
 function searchMode(e) {
   showsSection.innerHTML = '';
 
-  if (e.target.className == 'search') {
+  if (e.target.className.includes('search')) {
     searchSection.style.display = 'block';
-    searchSection.addEventListener('submit', function(e) {
-      showShows(searchShows);
-      e.preventDefault();
-    });
   } else {
     searchSection.style.display = 'none';
   }
@@ -126,7 +135,7 @@ function showShows(callback) {
   callback().then(resolve => {
     resolve.forEach(show => {
       showsSection.innerHTML += `<div id="show ${show.name}">
-          <a href="show.html"><img src="http://image.tmdb.org/t/p/w300${show.poster_path}" id="${show.id}" class="show-img" onerror="this.src='imagenes/Imagen_no_disponible.png'; this.className='img-not-found';"></a>
+          <a href="show.html"><img src="http://image.tmdb.org/t/p/w300${show.poster_path}" id="${show.id}" class="show-img" onerror="this.src='img/img-not-found.png'; this.className='img-not-found';"></a>
           </div>`;
     });
   });
@@ -134,19 +143,26 @@ function showShows(callback) {
 
 // Stores show id in session storage
 function setShowIdInStorage(e) {
-  if(e.target.className == "show-img"){
-    sessionStorage.setItem('id', e.target.id)
+  if (e.target.className.includes('show-img')) {
+    sessionStorage.setItem('id', e.target.id);
   }
 }
 
 function checkLi(e) {
-  e.target.className == 'search' ? searchMode(e) : searchMode(e);
-  e.target.className == 'latest' ? showLatestShows() : null;
-  e.target.className == 'top-rated' ? showShows(getTopRated) : null;
-  e.target.className == 'popular' ? showShows(getPopular) : null;
-  e.target.className == 'genre' ? genreMode(e) : genreMode(e);
+  toggleSelected(e);
+
+  e.target.className.includes('search') ? searchMode(e) : searchMode(e);
+  e.target.className.includes('latest') ? showLatestShows() : null;
+  e.target.className.includes('top-rated') ? showShows(getTopRated) : null;
+  e.target.className.includes('popular') ? showShows(getPopular) : null;
+  e.target.className.includes('genre') ? genreMode(e) : genreMode(e);
 }
 
-// Add events
-menuList.addEventListener('click', checkLi);
-showsSection.addEventListener('click', setShowIdInStorage)
+// Change color of selected Li
+function toggleSelected(e) {
+  let lis = menuList.children;
+
+  for (let i = 0; i < lis.length; i++) {
+    lis[i] == e.target ? lis[i].classList.add('selected') : lis[i].classList.remove('selected');
+  }
+}
