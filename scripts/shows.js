@@ -174,7 +174,12 @@ function setShowIdInStorage(e) {
 function checkLi(e) {
   let li = e.target ? e.target : e;
 
-  toggleSelectedLi(li);
+  // Change selected page and li when changing category
+  if(li != selectedLi) {
+    currentPage = 1;
+    toggleSelectedLi(li); 
+    toggleSelectedBtn(1, 1);
+  }
 
   li.className.includes('search') ? searchMode(li) : searchMode(li);
   li.className.includes('latest') ? showShows(getLatest) : null;
