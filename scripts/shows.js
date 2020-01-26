@@ -88,6 +88,7 @@ function genreMode(li) {
 
   if (li.className.includes('genre')) {
     genresSection.style.display = 'block';
+    pagesSection.style.display = 'none';
   } else {
     genresSection.style.display = 'none';
   }
@@ -132,6 +133,7 @@ function searchMode(li) {
 
   if (li.className.includes('search')) {
     searchSection.style.display = 'block';
+    pagesSection.style.display = 'none';
   } else {
     searchSection.style.display = 'none';
   }
@@ -161,6 +163,7 @@ function showShows(callback) {
           <a href="show.html"><img src="http://image.tmdb.org/t/p/w300${show.poster_path}" id="${show.id}" class="show-img" onerror="this.src='img/img-not-found.png'; this.className='img-not-found';"></a>
           </div>`;
     });
+    pagesSection.style.display = 'block';
   });
 }
 

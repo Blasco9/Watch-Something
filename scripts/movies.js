@@ -89,6 +89,7 @@ function genreMode(li) {
 
   if (li.className.includes('genre')) {
     genresSection.style.display = 'block';
+    pagesSection.style.display = 'none';
   } else {
     genresSection.style.display = 'none';
   }
@@ -133,6 +134,7 @@ function searchMode(li) {
 
   if (li.className.includes('search')) {
     searchSection.style.display = 'block';
+    pagesSection.style.display = 'none';
   } else {
     searchSection.style.display = 'none';
   }
@@ -164,6 +166,7 @@ function showMovies(callback) {
           <a href="movie.html"><img src="http://image.tmdb.org/t/p/w300${movie.poster_path}" id="${movie.id}" class="movie-img" onerror="this.src='img/img-not-found.png'; this.className='img-not-found';"></a>
           </div>`;
     });
+    pagesSection.style.display = 'block';
   });
 }
 
@@ -178,9 +181,9 @@ function checkLi(e) {
   let li = e.target ? e.target : e;
 
   // Change selected page and li when changing category
-  if(li != selectedLi) {
+  if (li != selectedLi) {
     currentPage = 1;
-    toggleSelectedLi(li); 
+    toggleSelectedLi(li);
     toggleSelectedBtn(1, 1);
   }
 
