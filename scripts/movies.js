@@ -57,6 +57,19 @@ function getTopRated() {
   return movies;
 }
 
+// Latest
+function getLatest() {
+  let movies = fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&language=en&page=${currentPage}`)
+    .then(resolve => {
+      return resolve.json();
+    })
+    .then(resolve => {
+      totalPages = resolve.total_pages;
+      return resolve.results.filter((el, index) => index <= 11);
+    });
+  return movies;
+}
+
 // Popular
 function getPopular() {
   let movies = fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en&page=${currentPage}`)
@@ -167,7 +180,7 @@ function checkLi(e) {
   toggleSelectedLi(li);
 
   li.className.includes('search') ? searchMode(li) : searchMode(li);
-  li.className.includes('latest') ? showLatestMovies() : null;
+  li.className.includes('latest') ? showMovies(getLatest) : null;
   li.className.includes('top-rated') ? showMovies(getTopRated) : null;
   li.className.includes('popular') ? showMovies(getPopular) : null;
   li.className.includes('genre') ? genreMode(li) : genreMode(li);
@@ -227,7 +240,7 @@ function changePage(btn) {
 
 function toggleSelectedBtn(currentBtn, btnNum) {
   let btns = [...pagesSection.children].slice(1, 11);
-  
+
   btns.forEach(el => {
     el.textContent = btnNum;
     if (el.textContent == currentBtn) {

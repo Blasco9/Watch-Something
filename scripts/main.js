@@ -8,10 +8,7 @@ export function getLatestMovies() {
       return resolve.json();
     })
     .then(resolve => {
-      let movies = resolve.results.filter((el, index) => {
-        return index <= 11;
-      });
-      return movies;
+      return resolve.results.filter((el, index) => index <= 11);
     });
   return movies;
 }
@@ -32,12 +29,8 @@ export function getLatestShows() {
       return resolve.json();
     })
     .then(resolve => {
-      let shows = resolve.results.filter((el, index) => {
-        return index <= 11;
-      });
-      return shows;
+      return resolve.results.filter((el, index) => index <= 11);
     });
-
   return shows;
 }
 
