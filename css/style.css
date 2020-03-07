@@ -28,6 +28,7 @@ footer, header, hgroup, menu, nav, section {
 body {
   line-height: 1;
   font-family: 'Roboto', sans-serif;
+  background-color: rgb(37, 37, 37);
 }
 ol, ul {
 	list-style: none;
@@ -47,7 +48,7 @@ table {
 
 /* UTILITY CLASSES */ 
 .selected {
-  color: rgb(255, 133, 11);
+  color: rgb(255, 133, 11) !important;
 }
 
 /* NAVBAR */
@@ -71,10 +72,12 @@ nav {
   text-decoration: none;
   list-style-type: none;
   color: rgb(204, 204, 204);
+  transition: font-size 300ms;
 }
 
 #navbar a:hover {
-  color: rgb(255, 255, 255)
+  color: rgb(255, 255, 255);
+  font-size: 18px;
 }
 
 /* MOVIES AND SHOWS */
@@ -87,6 +90,9 @@ nav {
   font-size: 2rem;
   text-transform: uppercase;
   font-weight: bold;
+  color: white;
+  word-spacing: 15px;
+  letter-spacing: 4px;
 }
 
 #movies, #shows {
@@ -102,6 +108,11 @@ nav {
 .movie-img, .show-img {
   width: 100%;
   height: 100%;
+  box-sizing: border-box;
+}
+
+#movies img:hover, #shows img:hover {
+  border: 2px solid rgb(255, 133, 11);
 }
 
 .img-not-found {
@@ -119,6 +130,7 @@ nav {
   flex-wrap: wrap;
   justify-content: space-evenly;
   list-style: none;
+  color: #fff;
 }
 
 .list li {
@@ -129,7 +141,7 @@ nav {
   color: peru;
 }
 
-/* BUSCADOR */
+/* SEARCH BAR */
 #search {
   display: block;
   margin: 2rem auto;
@@ -139,7 +151,7 @@ nav {
   font-size: 1.2rem;
 }
 
-/* GENEROS */
+/* GENRES */
 #genresSection {
   margin: 2rem auto;
   width: 20%;
@@ -147,7 +159,29 @@ nav {
   text-align-last: center;
 }
 
-/* PELICULA Y SERIE*/
+/* PAGES */
+#pages {
+  text-align: center;
+  width: 40%;
+  font-size: 1.5rem;
+  padding: 10px 0;
+  margin: 3rem auto;
+  background-color: rgb(83, 83, 83);
+  color: #fff;
+}
+
+#pages span {
+  display: inline-block;
+  width: 7%;
+  vertical-align: middle;
+}
+
+#pages span:hover {
+  color: peru;
+  cursor: pointer;
+}
+
+/* MOVIE AND SHOW */
 #movie, #show {
   padding: 5rem 2rem 0 2rem;
 }

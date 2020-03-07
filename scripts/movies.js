@@ -1,5 +1,3 @@
-import { showLatestMovies } from './main.js';
-
 // Variables
 const API_KEY = '9d181ecc759bf1deab6d6c3688395ebb',
   moviesSection = document.getElementById('movies'),
@@ -8,7 +6,7 @@ const API_KEY = '9d181ecc759bf1deab6d6c3688395ebb',
   genresSection = document.getElementById('genresSection'),
   pagesSection = document.getElementById('pages');
 let currentPage = 1,
-  totalPages = 0,
+  totalPages = 1,
   selectedLi = menuList.children[1],
   selectedBtn = pagesSection.children[1];
 // Initialize genre list
@@ -19,7 +17,7 @@ let genres = getGenres().then(resolve => {
 // Initial configuration on page load
 onload = function init() {
   // Shows latest movies on page load
-  showLatestMovies();
+  showMovies(getLatest);
   // Hides the search bar
   searchSection.style.display = 'none';
   // Hides the genre list
@@ -85,10 +83,10 @@ function getPopular() {
 
 // Genre
 function genreMode(li) {
-  moviesSection.innerHTML = '';
 
   if (li.className.includes('genre')) {
     genresSection.style.display = 'block';
+    moviesSection.innerHTML = '';
     pagesSection.style.display = 'none';
   } else {
     genresSection.style.display = 'none';
@@ -129,11 +127,11 @@ function getMoviesByGenre() {
 
 // Search
 function searchMode(li) {
-  moviesSection.innerHTML = '';
   document.getElementById('search').value = '';
 
   if (li.className.includes('search')) {
     searchSection.style.display = 'block';
+    moviesSection.innerHTML = '';
     pagesSection.style.display = 'none';
   } else {
     searchSection.style.display = 'none';
@@ -179,9 +177,9 @@ function setMovieIdInStorage(e) {
 
 function checkLi(e) {
   let li = e.target ? e.target : e;
-
+  
   // Change selected page and li when changing category
-  if (li != selectedLi) {
+  if (li != menuList && li != selectedLi) {
     currentPage = 1;
     toggleSelectedLi(li);
     toggleSelectedBtn(1, 1);

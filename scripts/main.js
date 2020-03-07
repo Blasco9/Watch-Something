@@ -2,7 +2,7 @@ const API_KEY = '9d181ecc759bf1deab6d6c3688395ebb',
   showsSection = document.querySelector('#shows'),
   moviesSection = document.querySelector('#movies');
 
-export function getLatestMovies() {
+function getLatestMovies() {
   let movies = fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&language=en`)
     .then(resolve => {
       return resolve.json();
@@ -13,7 +13,7 @@ export function getLatestMovies() {
   return movies;
 }
 
-export function showLatestMovies() {
+function showLatestMovies() {
   getLatestMovies().then(resolve => {
     resolve.forEach(movie => {
       moviesSection.innerHTML += `<div id="movie ${movie.title}">
@@ -23,7 +23,7 @@ export function showLatestMovies() {
   });
 }
 
-export function getLatestShows() {
+function getLatestShows() {
   let shows = fetch(`https://api.themoviedb.org/3/tv/on_the_air?api_key=${API_KEY}&language=en`)
     .then(resolve => {
       return resolve.json();
@@ -34,7 +34,7 @@ export function getLatestShows() {
   return shows;
 }
 
-export function showLatestShows() {
+function showLatestShows() {
   getLatestShows().then(resolve => {
     resolve.forEach(show => {
       showsSection.innerHTML += `<div id="show ${show.name}">
