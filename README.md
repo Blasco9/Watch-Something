@@ -10,7 +10,7 @@ This website connects with The Movie Database API to fetch the latest, most popu
 
 ## Live Demo
 
-[Link](https://rawcdn.githack.com/Blasco9/Watch-Something/db0e8e49625f950487c623110d775940d6f8f50e/index.html)
+[Link](https://blasco9.github.io/Watch-Something/)
 
 ## Built With
 
