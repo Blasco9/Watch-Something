@@ -27,17 +27,17 @@ function showMovie() {
     let trailer = movie.videos.results[0] || { key: '' };
 
     movieSection.innerHTML = `<div id="movie ${movie.title}">
-      <h3>${movie.title}</h3>
+      <h1 class="title">${movie.title}</h1>
       <div class="poster">
         <a href="#"><img src="http://image.tmdb.org/t/p/w300${movie.poster_path}" id="${movie.id}" class="movie-img" onerror="this.src='img/img-not-found.png'"></a>
       </div>
       <div class="info">
-        <p><span class="info-item">Cast:</span> ${cast}</p>
-        <p><span class="info-item">Genres:</span> ${genres}</p>
-        <p><span class="info-item">Tagline:</span> ${movie.tagline}</p>
-        <p><span class="info-item">Release Date:</span> ${movie.release_date}</p>
-        <p><span class="info-item">Runtime:</span> ${movie.runtime} min</p>
-        <p><span class="info-item">Rating:</span> ${movie.vote_average}</p>
+        <p class="info-paragraph"><span class="info-item">Cast:</span> ${cast}</p>
+        <p class="info-paragraph"><span class="info-item">Genres:</span> ${genres}</p>
+        <p class="info-paragraph"><span class="info-item">Tagline:</span> ${movie.tagline}</p>
+        <p class="info-paragraph"><span class="info-item">Release Date:</span> ${movie.release_date}</p>
+        <p class="info-paragraph"><span class="info-item">Runtime:</span> ${movie.runtime} min</p>
+        <p class="info-paragraph"><span class="info-item">Rating:</span> ${movie.vote_average}</p>
       </div>
       <div class="overview">
         <h3>Overview</h3>

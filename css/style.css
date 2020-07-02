@@ -184,6 +184,14 @@ nav {
 /* MOVIE AND SHOW */
 #movie, #show {
   padding: 5rem 2rem 0 2rem;
+  color: #fff;
+}
+
+.title {
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .poster {
@@ -193,20 +201,32 @@ nav {
 .info {
   display: inline-block;
   padding-left: 2rem;
+  padding-top: 4rem;
   vertical-align: top;
   font-size: 1.2rem;
 }
 
+.info-paragraph {
+  margin-bottom: 1.5rem;
+}
+
 .info-item {
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.2em;
   margin-right: 1rem;
 }
 
 .overview {
-  margin: 3rem auto;
-  width: 90%;
+  margin: 5rem auto;
+  width: 80%;
   text-align: center;
+}
+
+.overview h3 {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  text-decoration: underline;
 }
 
 .overview p {
@@ -230,6 +250,18 @@ nav {
   }
 }
 
+@media screen and (max-width: 1200px) {
+  .poster {
+    width: 60%;
+    display: block;
+    margin: 0 auto;
+  }
+
+  #video iframe {
+    width: 70%;
+  }
+}
+
 @media screen and (max-width: 700px) {
   .list {
     flex-direction: column;
@@ -238,6 +270,14 @@ nav {
 
   .list li {
     padding: 10px 0;
+  }
+
+  .poster {
+    width: 80%;
+  }
+
+  #video iframe {
+    width: 90%;
   }
 }
 

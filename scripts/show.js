@@ -29,19 +29,19 @@ function showShow() {
     let trailer = show.videos.results[0] || { key: '' };
 
     showSection.innerHTML = `<div id="show ${show.name}">
-      <h3>${show.name}</h3>
+      <h1 class="title">${show.name}</h1>
       <div class="poster">
         <a href="#"><img src="http://image.tmdb.org/t/p/w300${show.poster_path}" id="${show.id}" class="show-img"   onerror="this.src='img/img-not-found.png'"></a>
       </div>
       <div class="info">
-        <p><span class="info-item">Cast:</span> ${cast}</p>
-        <p><span class="info-item">Genres:</span> ${genres}</p>
-        <p><span class="info-item">Episode Runtime:</span> ${show.episode_run_time}min</p>
-        <p><span class="info-item">First Air Date:</span> ${show.first_air_date}</p>
-        <p><span class="info-item">Networks:</span> ${networks}</p>
-        <p><span class="info-item">Rating:</span> ${show.vote_average}</p>
-        <p><span class="info-item">Episodes:</span> ${show.number_of_episodes}</p>
-        <p><span class="info-item">Seasons:</span> ${show.number_of_seasons}</p>
+        <p class="info-paragraph"><span class="info-item">Cast:</span> ${cast}</p>
+        <p class="info-paragraph"><span class="info-item">Genres:</span> ${genres}</p>
+        <p class="info-paragraph"><span class="info-item">Episode Runtime:</span> ${show.episode_run_time}min</p>
+        <p class="info-paragraph"><span class="info-item">First Air Date:</span> ${show.first_air_date}</p>
+        <p class="info-paragraph"><span class="info-item">Networks:</span> ${networks}</p>
+        <p class="info-paragraph"><span class="info-item">Rating:</span> ${show.vote_average}</p>
+        <p class="info-paragraph"><span class="info-item">Episodes:</span> ${show.number_of_episodes}</p>
+        <p class="info-paragraph"><span class="info-item">Seasons:</span> ${show.number_of_seasons}</p>
       </div>
       <div class="overview">
         <h3>Overview</h3>
