@@ -4,9 +4,13 @@
 
 This website connects with The Movie Database API to fetch the latest, most popular and top-rated movies and shows. It also has the functionality to search by words or filter by genre.
 
-![screenshot](Screenshot1.bmp)
-![screenshot](Screenshot2.bmp)
-![screenshot](Screenshot3.bmp)
+![screenshot](/img/Screenshot1.bmp)
+![screenshot](/img/Screenshot2.bmp)
+![screenshot](/img/Screenshot3.bmp)
+
+## Live Demo
+
+[Link](https://rawcdn.githack.com/Blasco9/Watch-Something/db0e8e49625f950487c623110d775940d6f8f50e/index.html)
 
 ## Built With
 
